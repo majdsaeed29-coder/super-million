@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المليونير الذهبي - من سيربح المليون</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- الشاشة الرئيسية -->
+        <div id="start-screen" class="screen active">
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                <h1>المليونير الذهبي</h1>
+                <p class="subtitle">من سيربح المليون</p>
+            </div>
+            <div class="player-info">
+                <input type="text" id="player-name" placeholder="أدخل اسمك" maxlength="20">
+                <button id="start-btn" class="btn gold-btn">
+                    <i class="fas fa-play"></i> ابدأ اللعبة
+                </button>
+            </div>
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> تعليمات اللعبة:</h3>
+                <ul>
+                    <li>15 سؤالًا متدرج الصعوبة</li>
+                    <li>خطوط أمان عند السؤال 5 و 10</li>
+                    <li>ثلاث مساعدات: 50:50، سؤال الجمهور، الاتصال بصديق</li>
+                    <li>يمكنك الانسحاب بأي وقت وتحصل على الجائزة الأخيرة</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- شاشة اللعبة -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="player-display">
+                    <span id="current-player">اللاعب: </span>
+                    <div class="lifelines">
+                        <button id="fifty-fifty" class="lifeline-btn" title="50:50">
+                            <i class="fas fa-balance-scale"></i> 50:50
+                        </button>
+                        <button id="ask-audience" class="lifeline-btn" title="سؤال الجمهور">
+                            <i class="fas fa-users"></i> الجمهور
+                        </button>
+                        <button id="phone-friend" class="lifeline-btn" title="الاتصال بصديق">
+                            <i class="fas fa-phone-alt"></i> صديق
+                        </button>
+                    </div>
+                </div>
+                <div class="prize-display">
+                    <span id="current-prize">الجائزة الحالية: 0 جنيه</span>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="question-container">
+                    <div class="question-number">السؤال <span id="q-number">1</span> من 15</div>
+                    <div class="question-text" id="question-text">
+                        جاري تحميل السؤال...
+                    </div>
+                </div>
+
+                <div class="options-container">
+                    <div class="options-row">
+                        <button class="option-btn" data-option="A">
+                            <span class="option-label">أ</span>
+                            <span class="option-text" id="option-a"></span>
+                        </button>
+                        <button class="option-btn" data-option="B">
+                            <span class="option-label">ب</span>
+                            <span class="option-text" id="option-b"></span>
+                        </button>
+                    </div>
+                    <div class="options-row">
+                        <button class="option-btn" data-option="C">
+                            <span class="option-label">ج</span>
+                            <span class="option-text" id="option-c"></span>
+                        </button>
+                        <button class="option-btn" data-option="D">
+                            <span class="option-label">د</span>
+                            <span class="option-text" id="option-d"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="game-controls">
+                    <button id="withdraw-btn" class="btn withdraw-btn">
+                        <i class="fas fa-hand-holding-usd"></i> انسحاب آمن
+                    </button>
+                    <button id="next-btn" class="btn next-btn disabled">
+                        <i class="fas fa-forward"></i> السؤال التالي
+                    </button>
+                </div>
+            </div>
+
+            <!-- درجات الجوائز -->
+            <div class="prizes-sidebar">
+                <div class="prizes-list">
+                    <!-- سيتم تعبئتها بواسطة JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة النتائج -->
+        <div id="result-screen" class="screen">
+            <div class="result-content">
+                <i class="fas fa-trophy result-icon"></i>
+                <h2 id="result-title">مبروك!</h2>
+                <div class="prize-won">
+                    <h3 id="final-prize">0 جنيه</h3>
+                    <p>الجائزة التي فزت بها</p>
+                </div>
+                <div class="result-details">
+                    <p>اسم اللاعب: <span id="result-player-name"></span></p>
+                    <p>عدد الأسئلة المجابة: <span id="questions-answered"></span> / 15</p>
+                    <p>المساعدات المتبقية: <span id="lifelines-left"></span> / 3</p>
+                </div>
+                <button id="play-again-btn" class="btn gold-btn">
+                    <i class="fas fa-redo"></i> العب مرة أخرى
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة المساعدة -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="help-title"></h3>
+            <p id="help-text"></p>
+            <button id="close-help" class="btn">موافق</button>
+        </div>
+    </div>
+
+    <!-- نافذة الانسحاب -->
+    <div id="withdraw-modal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-exclamation-triangle"></i> تأكيد الانسحاب</h3>
+            <p>هل أنت متأكد من الانسحاب؟ ستحصل على <span id="withdraw-amount">0</span> جنيه</p>
+            <div class="modal-buttons">
+                <button id="confirm-withdraw" class="btn withdraw-btn">نعم، انسحاب</button>
+                <button id="cancel-withdraw" class="btn">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
