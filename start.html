@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المليونير الذهبي - شاشة البداية</title>
+    <link rel="stylesheet" href="start.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="start-container">
+        <!-- الخلفية المتحركة -->
+        <div class="background-animation">
+            <div class="stars"></div>
+            <div class="twinkling"></div>
+            <div class="clouds"></div>
+        </div>
+
+        <!-- الشعار والعنوان -->
+        <div class="logo-section">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-crown"></i>
+                    <div class="crown-glow"></div>
+                </div>
+                <h1 class="game-title">المليونير الذهبي</h1>
+                <p class="game-subtitle">من سيربح المليون</p>
+            </div>
+        </div>
+
+        <!-- معلومات اللاعب -->
+        <div class="player-section">
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="player-name" placeholder="أدخل اسمك هنا..." maxlength="20" autocomplete="off">
+                    <div class="input-border"></div>
+                </div>
+                <div class="input-hint">اسمك سوف يظهر أثناء اللعبة وفي لوحة المتصدرين</div>
+            </div>
+
+            <button id="start-game-btn" class="start-button">
+                <div class="button-content">
+                    <i class="fas fa-play-circle"></i>
+                    <span class="button-text">ابدأ اللعبة</span>
+                </div>
+                <div class="button-shine"></div>
+                <div class="button-particles"></div>
+            </button>
+        </div>
+
+        <!-- إحصائيات اللعبة -->
+        <div class="stats-section">
+            <div class="stats-container">
+                <div class="stat-card" data-stat="prize">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">1,000,000</div>
+                        <div class="stat-label">جائزة كبرى</div>
+                    </div>
+                </div>
+
+                <div class="stat-card" data-stat="questions">
+                    <div class="stat-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">15</div>
+                        <div class="stat-label">سؤال</div>
+                    </div>
+                </div>
+
+                <div class="stat-card" data-stat="lifelines">
+                    <div class="stat-icon">
+                        <i class="fas fa-life-ring"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">مساعدات</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- المميزات -->
+        <div class="features-section">
+            <h3 class="section-title">
+                <i class="fas fa-star"></i>
+                مميزات اللعبة
+            </h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4 class="feature-title">خطوط أمان</h4>
+                    <p class="feature-description">أسئلة آمنة عند 5 و 10</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4 class="feature-title">مساعدة الجمهور</h4>
+                    <p class="feature-description">استشارة المشاهدين</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h4 class="feature-title">الاتصال بصديق</h4>
+                    <p class="feature-description">استفسر من خبير</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h4 class="feature-title">50:50</h4>
+                    <p class="feature-description">إزالة إجابتين خاطئتين</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- الإعدادات السريعة -->
+        <div class="settings-section">
+            <div class="settings-container">
+                <button class="setting-btn" id="sound-toggle" title="تشغيل/إيقاف الصوت">
+                    <i class="fas fa-volume-up"></i>
+                    <span class="setting-text">الصوت</span>
+                </button>
+
+                <button class="setting-btn" id="instructions-btn" title="تعليمات اللعبة">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="setting-text">تعليمات</span>
+                </button>
+
+                <button class="setting-btn" id="high-scores-btn" title="أعلى النتائج">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="setting-text">المتصدرين</span>
+                </button>
+
+                <button class="setting-btn" id="credits-btn" title="نبذة عن المطور">
+                    <i class="fas fa-code"></i>
+                    <span class="setting-text">نبذة</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- تذييل الصفحة -->
+        <footer class="footer-section">
+            <div class="footer-content">
+                <div class="copyright">
+                    <i class="fas fa-copyright"></i>
+                    <span>2024 المليونير الذهبي. جميع الحقوق محفوظة.</span>
+                </div>
+                <div class="version">الإصدار 2.0</div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- نافذة التعليمات -->
+    <div id="instructions-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> تعليمات اللعبة</h3>
+                <button class="modal-close" id="close-instructions">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="instructions-content">
+                    <!-- محتوى التعليمات -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn" id="understand-btn">بدأت أفهم!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة المتصدرين -->
+    <div id="high-scores-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-chart-line"></i> المتصدرين</h3>
+                <button class="modal-close" id="close-scores">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="scores-content">
+                    <!-- قائمة المتصدرين -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة النبذة -->
+    <div id="credits-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-code"></i> نبذة عن المطور</h3>
+                <button class="modal-close" id="close-credits">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="credits-content">
+                    <!-- محتوى النبذة -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- سكريبتات -->
+    <script src="start.js" type="module"></script>
+</body>
+                  </html>
