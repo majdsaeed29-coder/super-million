@@ -1,5 +1,4 @@
-
-// main.js - الملف الرئيسي لربط كل الوحدات
+// main.js - المعدل
 import { CONFIG } from './config.js';
 import { gameState } from './gameState.js';
 import { gameLogic } from './gameLogic.js';
@@ -8,30 +7,22 @@ import { lifelines } from './lifelines.js';
 import { timer } from './timer.js';
 import { audioManager } from './audioManager.js';
 import { uiEffects } from './uiEffects.js';
+import { PRIZES } from './config.js';
 
 // دالة تهيئة اللعبة الرئيسية
 export function initMainGame() {
     console.log(`${CONFIG.APP_NAME} v${CONFIG.VERSION} - Game Started`);
     
-    // تهيئة مدير الصوت
     audioManager.initialize();
-    
-    // تهيئة المؤثرات البصرية
     uiEffects.init();
-    
-    // تحميل حالة اللعبة من localStorage إذا موجودة
     loadGameState();
-    
-    // إعداد مستمعي الأحداث
     setupEventListeners();
     
-    // بدء الجولة الأولى إذا كان هناك اسم لاعب
     if (gameState.playerName) {
         gameLogic.startNewRound();
     }
 }
 
-// تحميل حالة اللعبة المحفوظة
 function loadGameState() {
     try {
         const savedPlayerName = localStorage.getItem('millionairePlayerName');
@@ -50,21 +41,19 @@ function loadGameState() {
     }
 }
 
-// إعداد جميع مستمعي الأحداث
 function setupEventListeners() {
     const { elements } = domManager;
     
-    // زر التالي
+    if (!elements) return;
+    
     elements.nextBtn?.addEventListener('click', () => {
         if (gameLogic.goToNextQuestion()) {
             audioManager.play('click');
         }
     });
     
-    // زر الانسحاب
     elements.withdrawBtn?.addEventListener('click', showWithdrawModal);
     
-    // المساعدات
     elements.fiftyFiftyBtn?.addEventListener('click', () => {
         lifelines.useFiftyFifty();
         audioManager.play('click');
@@ -80,29 +69,28 @@ function setupEventListeners() {
         audioManager.play('click');
     });
     
-    // خيارات الإجابة
-    elements.optionButtons?.forEach((btn, index) => {
-        btn.addEventListener('click', () => {
-            if (!gameState.gameActive || gameState.selectedOption !== null) return;
-            
-            audioManager.play('click');
-            const isCorrect = gameLogic.checkAnswer(index);
-            
-            if (!isCorrect) {
-                setTimeout(() => {
-                    gameLogic.endGame(false);
-                }, 2000);
-            }
+    if (elements.optionButtons) {
+        elements.optionButtons.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                if (!gameState.gameActive || gameState.selectedOption !== null) return;
+                
+                audioManager.play('click');
+                const isCorrect = gameLogic.checkAnswer(index);
+                
+                if (!isCorrect) {
+                    setTimeout(() => {
+                        gameLogic.endGame(false);
+                    }, 2000);
+                }
+            });
         });
-    });
+    }
     
-    // إعادة اللعب
     elements.playAgainBtn?.addEventListener('click', () => {
         resetGame();
-        window.location.href = 'start.html'; // العودة لشاشة البداية
+        window.location.href = 'start.html';
     });
     
-    // نافذة الانسحاب
     document.getElementById('confirm-withdraw')?.addEventListener('click', () => {
         const prize = gameLogic.safeWithdraw();
         domManager.showNotification(`انسحاب آمن! ربحت ${prize.toLocaleString()} $`, 'info');
@@ -113,29 +101,25 @@ function setupEventListeners() {
         domManager.showScreen('game');
     });
     
-    // زر القائمة الرئيسية
     document.getElementById('main-menu-btn')?.addEventListener('click', () => {
         window.location.href = 'start.html';
     });
     
-    // زر مشاركة النتيجة
     document.getElementById('share-result')?.addEventListener('click', shareResult);
     
-    // تحكم بالصوت في شاشة اللعبة
     document.getElementById('sound-toggle-game')?.addEventListener('click', toggleSound);
-    
-    // زر الإيقاف المؤقت
     document.getElementById('pause-btn')?.addEventListener('click', togglePause);
 }
 
-// إظهار نافذة الانسحاب
 function showWithdrawModal() {
     const prize = gameState.getSafePrize();
-    document.getElementById('withdraw-amount').textContent = prize.toLocaleString();
+    const withdrawAmount = document.getElementById('withdraw-amount');
+    if (withdrawAmount) {
+        withdrawAmount.textContent = prize.toLocaleString();
+    }
     domManager.showScreen('withdrawModal');
 }
 
-// تبديل الصوت
 function toggleSound() {
     const isEnabled = audioManager.toggle();
     const btn = document.getElementById('sound-toggle-game');
@@ -146,7 +130,6 @@ function toggleSound() {
     }
 }
 
-// تبديل الإيقاف المؤقت
 function togglePause() {
     if (gameState.isPaused) {
         timer.resume();
@@ -159,7 +142,6 @@ function togglePause() {
     }
 }
 
-// مشاركة النتيجة
 function shareResult() {
     const shareText = `فزت ب ${gameState.score.toLocaleString()} $ في لعبة المليونير الذهبي! جربها الآن:`;
     
@@ -175,7 +157,6 @@ function shareResult() {
     }
 }
 
-// إعادة تعيين اللعبة
 export function resetGame() {
     gameState.reset();
     lifelines.resetLifelines();
@@ -183,5 +164,4 @@ export function resetGame() {
     uiEffects.reset();
 }
 
-// تصدير دوال مهمة
 export { gameState, gameLogic, domManager, lifelines, timer, audioManager };
