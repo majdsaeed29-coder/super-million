@@ -1,5 +1,4 @@
-
-// config.js - الإعدادات المشتركة
+// config.js
 export const CONFIG = {
     APP_NAME: "المليونير الذهبي",
     VERSION: "2.0.0",
