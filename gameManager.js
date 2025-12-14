@@ -1,29 +1,40 @@
-// gameManager.js
-import { gameState } from './gameState.js';
-import { gameLogic } from './gameLogic.js';
-import { domManager } from './domManager.js';
+// gameManager.js - لإدارة تدفق اللعبة
+import { initMainGame, gameState, domManager } from './main.js';
 
 class GameManager {
     constructor() {
-        this.initGame();
+        this.init();
     }
-    
-    initGame() {
-        // الحصول على اسم اللاعب من localStorage
-        const playerName = localStorage.getItem('millionairePlayerName') || 'ضيف';
+
+    init() {
+        // التحقق إذا كان هناك اسم لاعب
+        const playerName = localStorage.getItem('millionairePlayerName');
         
-        // تهيئة حالة اللعبة
-        gameState.start(playerName);
+        if (!playerName) {
+            // إذا ما في اسم، ارجع لشاشة البداية
+            window.location.href = 'start.html';
+            return;
+        }
         
         // بدء اللعبة
-        gameLogic.startNewRound();
-        
-        // تحديث الواجهة
+        gameState.playerName = playerName;
         domManager.updatePlayerInfo(playerName);
+        
+        // تهيئة اللعبة الرئيسية
+        initMainGame();
+        
+        // تحميل التصميم
+        this.loadGameUI();
+    }
+
+    loadGameUI() {
+        // هنا يمكنك تحميل واجهة اللعبة ديناميكياً إذا أردت
+        // أو تركها كما هي في game.html
+        console.log('Game UI Loaded');
     }
 }
 
-// بدء اللعبة عند تحميل الصفحة
+// بدء مدير اللعبة عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
-    const gameManager = new GameManager();
+    new GameManager();
 });
