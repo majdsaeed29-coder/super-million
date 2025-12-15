@@ -10,6 +10,7 @@
 </head>
 <body>
     <div class="start-container">
+        <!-- الخلفية المتحركة -->
         <div class="background-animation">
             <div class="stars"></div>
             <div class="twinkling"></div>
@@ -17,6 +18,7 @@
             <div class="floating-coins"></div>
         </div>
 
+        <!-- الشعار -->
         <div class="logo-section">
             <div class="logo">
                 <div class="logo-icon">
@@ -28,6 +30,7 @@
             </div>
         </div>
 
+        <!-- قسم التسجيل/الدخول -->
         <div class="auth-section">
             <div class="auth-tabs">
                 <button class="tab-btn active" id="login-tab">تسجيل الدخول</button>
@@ -35,7 +38,7 @@
             </div>
 
             <div class="auth-forms">
-                <!-- تسجيل الدخول -->
+                <!-- نموذج تسجيل الدخول -->
                 <form id="login-form" class="auth-form active">
                     <div class="input-container">
                         <div class="input-wrapper">
@@ -64,7 +67,7 @@
                     </button>
                 </form>
 
-                <!-- إنشاء حساب -->
+                <!-- نموذج إنشاء حساب -->
                 <form id="register-form" class="auth-form">
                     <div class="input-container">
                         <div class="input-wrapper">
@@ -96,6 +99,7 @@
                 </form>
             </div>
 
+            <!-- خيار الدخول كزائر -->
             <div class="guest-option">
                 <p>أو</p>
                 <button class="guest-btn" id="play-as-guest">
@@ -105,81 +109,35 @@
             </div>
         </div>
 
-        <div class="game-settings">
-            <h3><i class="fas fa-cog"></i> إعدادات اللعبة</h3>
-            <div class="settings-grid">
-                <div class="setting-item">
-                    <label class="toggle-label">
-                        <span>المؤقت</span>
-                        <label class="switch">
-                            <input type="checkbox" id="timer-toggle" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <label class="select-label">
-                        <span>نوع الأسئلة</span>
-                        <select id="question-type">
-                            <option value="all">جميع الأسئلة</option>
-                            <option value="general">معلومات عامة</option>
-                            <option value="science">علوم وتكنولوجيا</option>
-                            <option value="history">تاريخ</option>
-                            <option value="sports">رياضة</option>
-                        </select>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <label class="select-label">
-                        <span>الصعوبة</span>
-                        <select id="difficulty">
-                            <option value="easy">سهل</option>
-                            <option value="medium" selected>متوسط</option>
-                            <option value="hard">صعب</option>
-                        </select>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <label class="select-label">
-                        <span>الصوت</span>
-                        <select id="volume">
-                            <option value="100">عالٍ</option>
-                            <option value="70" selected>متوسط</option>
-                            <option value="50">منخفض</option>
-                            <option value="0">مطفأ</option>
-                        </select>
-                    </label>
-                </div>
-            </div>
-        </div>
-
+        <!-- الإحصائيات -->
         <div class="player-stats">
             <h3><i class="fas fa-chart-line"></i> إحصائيات اللاعبين</h3>
             <div class="stats-grid">
                 <div class="stat-card">
                     <i class="fas fa-trophy"></i>
                     <div class="stat-content">
-                        <div class="stat-value">1,234</div>
+                        <div class="stat-value" id="millionaires-count">0</div>
                         <div class="stat-label">مليونير</div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-users"></i>
                     <div class="stat-content">
-                        <div class="stat-value">50,678</div>
+                        <div class="stat-value" id="active-players">0</div>
                         <div class="stat-label">لاعب نشط</div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-coins"></i>
                     <div class="stat-content">
-                        <div class="stat-value">$15M</div>
+                        <div class="stat-value" id="total-prizes">$0</div>
                         <div class="stat-label">جوائز ممنوحة</div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- زر البدء السريع -->
         <div class="quick-play">
             <button id="quick-start" class="quick-start-btn">
                 <i class="fas fa-bolt"></i>
@@ -187,21 +145,465 @@
             </button>
         </div>
 
+        <!-- الفوتر -->
         <footer class="footer-section">
             <div class="footer-content">
                 <div class="copyright">
                     <i class="fas fa-copyright"></i>
                     <span>2024 المليونير الذهبي. جميع الحقوق محفوظة.</span>
                 </div>
-                <div class="footer-links">
-                    <a href="#"><i class="fas fa-question-circle"></i> المساعدة</a>
-                    <a href="#"><i class="fas fa-shield-alt"></i> الخصوصية</a>
-                    <a href="#"><i class="fas fa-file-contract"></i> الشروط</a>
-                </div>
+                <div class="version">الإصدار 3.0</div>
             </div>
         </footer>
     </div>
 
-    <script src="start.js"></script>
+    <!-- إضافة ملف JavaScript -->
+    <script type="module">
+        import { audioManager } from './audioManager.js';
+
+        class StartPage {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                console.log('صفحة تسجيل الدخول - المليونير الذهبي');
+                
+                // تشغيل صوت الدخول
+                audioManager.play('start');
+                
+                this.setupTabs();
+                this.setupForms();
+                this.setupEventListeners();
+                this.loadUserPreferences();
+                this.updateStats();
+            }
+
+            setupTabs() {
+                const loginTab = document.getElementById('login-tab');
+                const registerTab = document.getElementById('register-tab');
+                const loginForm = document.getElementById('login-form');
+                const registerForm = document.getElementById('register-form');
+
+                loginTab.addEventListener('click', () => {
+                    audioManager.play('click');
+                    loginTab.classList.add('active');
+                    registerTab.classList.remove('active');
+                    loginForm.classList.add('active');
+                    registerForm.classList.remove('active');
+                });
+
+                registerTab.addEventListener('click', () => {
+                    audioManager.play('click');
+                    registerTab.classList.add('active');
+                    loginTab.classList.remove('active');
+                    registerForm.classList.add('active');
+                    loginForm.classList.remove('active');
+                });
+            }
+
+            setupForms() {
+                // نموذج تسجيل الدخول
+                document.getElementById('login-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+
+                // نموذج إنشاء حساب
+                document.getElementById('register-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleRegistration();
+                });
+            }
+
+            setupEventListeners() {
+                // زر الدخول كزائر
+                document.getElementById('play-as-guest').addEventListener('click', () => {
+                    audioManager.play('click');
+                    this.playAsGuest();
+                });
+
+                // زر البدء السريع
+                document.getElementById('quick-start').addEventListener('click', () => {
+                    audioManager.play('start');
+                    this.quickStart();
+                });
+
+                // زر نسيت كلمة المرور
+                document.querySelector('.forgot-password')?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    audioManager.play('click');
+                    this.showForgotPassword();
+                });
+            }
+
+            loadUserPreferences() {
+                // تحميل آخر مستخدم
+                const lastUser = localStorage.getItem('lastUser');
+                if (lastUser) {
+                    document.getElementById('login-username').value = lastUser;
+                }
+
+                // تفعيل تذكرني إذا كان محفوظ
+                if (localStorage.getItem('rememberMe') === 'true') {
+                    document.getElementById('remember-me').checked = true;
+                }
+            }
+
+            updateStats() {
+                try {
+                    const stats = JSON.parse(localStorage.getItem('gameStats')) || {};
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    
+                    // تحديث الإحصائيات
+                    document.getElementById('millionaires-count').textContent = 
+                        users.filter(u => u.score >= 1000000).length;
+                    
+                    document.getElementById('active-players').textContent = 
+                        users.length;
+                    
+                    document.getElementById('total-prizes').textContent = 
+                        '$' + users.reduce((sum, u) => sum + (u.score || 0), 0).toLocaleString();
+                    
+                } catch (error) {
+                    console.log('خطأ في تحميل الإحصائيات:', error);
+                }
+            }
+
+            async handleLogin() {
+                const username = document.getElementById('login-username').value.trim();
+                const password = document.getElementById('login-password').value.trim();
+                const rememberMe = document.getElementById('remember-me').checked;
+
+                if (!username || !password) {
+                    this.showNotification('يرجى ملء جميع الحقول', 'error');
+                    return;
+                }
+
+                this.showLoading(true);
+
+                try {
+                    // محاكاة تأخير الشبكة
+                    await this.delay(1000);
+                    
+                    // البحث عن المستخدم
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    const user = users.find(u => u.username === username && u.password === password);
+
+                    if (user) {
+                        // حفظ بيانات الجلسة
+                        const sessionData = {
+                            username: user.username,
+                            email: user.email,
+                            level: user.level || 1,
+                            score: user.score || 0,
+                            gamesPlayed: user.gamesPlayed || 0,
+                            lastLogin: new Date().toISOString()
+                        };
+
+                        localStorage.setItem('currentUser', JSON.stringify(sessionData));
+                        
+                        if (rememberMe) {
+                            localStorage.setItem('lastUser', username);
+                            localStorage.setItem('rememberMe', 'true');
+                        } else {
+                            localStorage.removeItem('rememberMe');
+                        }
+
+                        audioManager.play('correct');
+                        this.showNotification('تم تسجيل الدخول بنجاح!', 'success');
+                        
+                        await this.delay(1500);
+                        this.startGame(sessionData);
+                        
+                    } else {
+                        audioManager.play('wrong');
+                        this.showNotification('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+                    }
+                    
+                } catch (error) {
+                    audioManager.play('wrong');
+                    this.showNotification('حدث خطأ أثناء تسجيل الدخول', 'error');
+                    console.error(error);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            async handleRegistration() {
+                const username = document.getElementById('register-username').value.trim();
+                const email = document.getElementById('register-email').value.trim();
+                const password = document.getElementById('register-password').value.trim();
+                const confirmPassword = document.getElementById('register-confirm').value.trim();
+
+                // التحقق من البيانات
+                if (!username || !email || !password || !confirmPassword) {
+                    this.showNotification('يرجى ملء جميع الحقول', 'error');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    this.showNotification('كلمة المرور غير متطابقة', 'error');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    this.showNotification('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+                    return;
+                }
+
+                if (!this.isValidEmail(email)) {
+                    this.showNotification('البريد الإلكتروني غير صالح', 'error');
+                    return;
+                }
+
+                this.showLoading(true);
+
+                try {
+                    await this.delay(1000);
+                    
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    
+                    // التحقق من التكرار
+                    if (users.some(u => u.username === username)) {
+                        audioManager.play('wrong');
+                        this.showNotification('اسم المستخدم موجود مسبقاً', 'error');
+                        return;
+                    }
+
+                    if (users.some(u => u.email === email)) {
+                        audioManager.play('wrong');
+                        this.showNotification('البريد الإلكتروني موجود مسبقاً', 'error');
+                        return;
+                    }
+
+                    // إنشاء المستخدم الجديد
+                    const newUser = {
+                        username,
+                        email,
+                        password, // ملاحظة: في التطبيق الحقيقي يجب تشفير كلمة المرور
+                        createdAt: new Date().toISOString(),
+                        level: 1,
+                        score: 0,
+                        gamesPlayed: 0,
+                        isActive: true
+                    };
+
+                    users.push(newUser);
+                    localStorage.setItem('users', JSON.stringify(users));
+
+                    // تسجيل الدخول تلقائياً
+                    const sessionData = {
+                        username: newUser.username,
+                        email: newUser.email,
+                        level: newUser.level,
+                        score: newUser.score,
+                        gamesPlayed: newUser.gamesPlayed,
+                        lastLogin: new Date().toISOString()
+                    };
+
+                    localStorage.setItem('currentUser', JSON.stringify(sessionData));
+                    localStorage.setItem('lastUser', username);
+
+                    audioManager.play('win');
+                    this.showNotification('تم إنشاء الحساب بنجاح!', 'success');
+                    
+                    await this.delay(1500);
+                    this.startGame(sessionData);
+                    
+                } catch (error) {
+                    audioManager.play('wrong');
+                    this.showNotification('حدث خطأ أثناء إنشاء الحساب', 'error');
+                    console.error(error);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            playAsGuest() {
+                const guestUser = {
+                    username: 'زائر_' + Math.floor(Math.random() * 10000),
+                    isGuest: true,
+                    level: 1,
+                    score: 0,
+                    gamesPlayed: 0,
+                    lastLogin: new Date().toISOString()
+                };
+
+                localStorage.setItem('currentUser', JSON.stringify(guestUser));
+                
+                audioManager.play('start');
+                this.showNotification('مرحباً بك كزائر!', 'info');
+                
+                setTimeout(() => {
+                    this.startGame(guestUser);
+                }, 1500);
+            }
+
+            quickStart() {
+                // استخدام الإعدادات الافتراضية
+                const settings = {
+                    timerEnabled: true,
+                    questionType: 'all',
+                    difficulty: 'medium',
+                    quickStart: true
+                };
+
+                localStorage.setItem('gameSettings', JSON.stringify(settings));
+                
+                // إذا لم يكن هناك مستخدم، الدخول كزائر
+                if (!localStorage.getItem('currentUser')) {
+                    this.playAsGuest();
+                } else {
+                    const user = JSON.parse(localStorage.getItem('currentUser'));
+                    this.startGame(user);
+                }
+            }
+
+            startGame(user) {
+                // تحديث الإحصائيات
+                this.updateGameStats();
+                
+                // تشغيل صوت البداية
+                audioManager.play('start');
+                
+                // الانتقال بعد تأخير بسيط
+                setTimeout(() => {
+                    window.location.href = 'game.html';
+                }, 1000);
+            }
+
+            updateGameStats() {
+                const stats = JSON.parse(localStorage.getItem('gameStats') || '{}');
+                stats.totalVisits = (stats.totalVisits || 0) + 1;
+                stats.lastVisit = new Date().toISOString();
+                localStorage.setItem('gameStats', JSON.stringify(stats));
+            }
+
+            showForgotPassword() {
+                const email = prompt('أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور:');
+                if (email && this.isValidEmail(email)) {
+                    this.showNotification('تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني', 'info');
+                }
+            }
+
+            isValidEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            showNotification(message, type = 'info') {
+                // إنشاء عنصر الإشعار
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                
+                const icons = {
+                    success: 'check-circle',
+                    error: 'exclamation-circle',
+                    info: 'info-circle',
+                    warning: 'exclamation-triangle'
+                };
+                
+                notification.innerHTML = `
+                    <i class="fas fa-${icons[type] || 'info-circle'}"></i>
+                    <span>${message}</span>
+                    <button class="notification-close"><i class="fas fa-times"></i></button>
+                `;
+
+                // إضافة التصميم
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #1e3799, #0c2461);
+                    border-radius: 10px;
+                    padding: 15px 20px;
+                    border-right: 5px solid;
+                    border-color: ${type === 'success' ? '#27ae60' : 
+                                 type === 'error' ? '#e74c3c' : 
+                                 type === 'warning' ? '#f39c12' : '#3498db'};
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    z-index: 1000;
+                    animation: slideIn 0.5s ease;
+                `;
+
+                // إضافة الـ keyframes للأنيميشن
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes slideIn {
+                        from {
+                            transform: translateX(100%);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                    }
+                    @keyframes slideOut {
+                        from {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translateX(100%);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+
+                document.body.appendChild(notification);
+
+                // إغلاق الإشعار عند النقر
+                notification.querySelector('.notification-close').addEventListener('click', () => {
+                    notification.style.animation = 'slideOut 0.5s ease forwards';
+                    setTimeout(() => {
+                        notification.remove();
+                        style.remove();
+                    }, 500);
+                });
+
+                // إزالة الإشعار تلقائياً بعد 5 ثوان
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.style.animation = 'slideOut 0.5s ease forwards';
+                        setTimeout(() => {
+                            notification.remove();
+                            style.remove();
+                        }, 500);
+                    }
+                }, 5000);
+            }
+
+            showLoading(show) {
+                const buttons = document.querySelectorAll('button');
+                
+                if (show) {
+                    buttons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.7';
+                    });
+                } else {
+                    buttons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                    });
+                }
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // بدء الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            const startPage = new StartPage();
+        });
+    </script>
 </body>
-                </html>
+</html>
