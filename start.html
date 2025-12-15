@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المليونير الذهبي - شاشة البداية</title>
-    <link rel="stylesheet" href="css/start.css">
+    <title>المليونير الذهبي - تسجيل الدخول</title>
+    <link rel="stylesheet" href="start.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -14,6 +14,7 @@
             <div class="stars"></div>
             <div class="twinkling"></div>
             <div class="clouds"></div>
+            <div class="floating-coins"></div>
         </div>
 
         <div class="logo-section">
@@ -23,116 +24,167 @@
                     <div class="crown-glow"></div>
                 </div>
                 <h1 class="game-title">المليونير الذهبي</h1>
-                <p class="game-subtitle">من سيربح المليون</p>
+                <p class="game-subtitle">سجل حسابك وابدأ التحدي</p>
             </div>
         </div>
 
-        <div class="player-section">
-            <div class="input-container">
-                <div class="input-wrapper">
-                    <i class="fas fa-user input-icon"></i>
-                    <input type="text" id="player-name" placeholder="أدخل اسمك هنا..." maxlength="20" autocomplete="off">
-                    <div class="input-border"></div>
-                </div>
-                <div class="input-hint">اسمك سوف يظهر أثناء اللعبة وفي لوحة المتصدرين</div>
+        <div class="auth-section">
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="login-tab">تسجيل الدخول</button>
+                <button class="tab-btn" id="register-tab">إنشاء حساب</button>
             </div>
 
-            <button id="start-game-btn" class="start-button">
-                <div class="button-content">
-                    <i class="fas fa-play-circle"></i>
-                    <span class="button-text">ابدأ اللعبة</span>
+            <div class="auth-forms">
+                <!-- تسجيل الدخول -->
+                <form id="login-form" class="auth-form active">
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="login-username" placeholder="اسم المستخدم" required>
+                            <div class="input-border"></div>
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="login-password" placeholder="كلمة المرور" required>
+                            <div class="input-border"></div>
+                        </div>
+                    </div>
+
+                    <div class="auth-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember-me">
+                            <span>تذكرني</span>
+                        </label>
+                        <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+                    </div>
+
+                    <button type="submit" class="auth-button login-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>دخول</span>
+                    </button>
+                </form>
+
+                <!-- إنشاء حساب -->
+                <form id="register-form" class="auth-form">
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="register-username" placeholder="اسم المستخدم" required>
+                            <div class="input-border"></div>
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="register-email" placeholder="البريد الإلكتروني" required>
+                            <div class="input-border"></div>
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="register-password" placeholder="كلمة المرور" required>
+                            <div class="input-border"></div>
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="register-confirm" placeholder="تأكيد كلمة المرور" required>
+                            <div class="input-border"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="auth-button register-btn">
+                        <i class="fas fa-user-plus"></i>
+                        <span>إنشاء حساب</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="guest-option">
+                <p>أو</p>
+                <button class="guest-btn" id="play-as-guest">
+                    <i class="fas fa-user-clock"></i>
+                    <span>الدخول كزائر</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="game-settings">
+            <h3><i class="fas fa-cog"></i> إعدادات اللعبة</h3>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label class="toggle-label">
+                        <span>المؤقت</span>
+                        <label class="switch">
+                            <input type="checkbox" id="timer-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </label>
                 </div>
-                <div class="button-shine"></div>
-                <div class="button-particles"></div>
+                <div class="setting-item">
+                    <label class="select-label">
+                        <span>نوع الأسئلة</span>
+                        <select id="question-type">
+                            <option value="all">جميع الأسئلة</option>
+                            <option value="general">معلومات عامة</option>
+                            <option value="science">علوم وتكنولوجيا</option>
+                            <option value="history">تاريخ</option>
+                            <option value="sports">رياضة</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label class="select-label">
+                        <span>الصعوبة</span>
+                        <select id="difficulty">
+                            <option value="easy">سهل</option>
+                            <option value="medium" selected>متوسط</option>
+                            <option value="hard">صعب</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label class="select-label">
+                        <span>الصوت</span>
+                        <select id="volume">
+                            <option value="100">عالٍ</option>
+                            <option value="70" selected>متوسط</option>
+                            <option value="50">منخفض</option>
+                            <option value="0">مطفأ</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="player-stats">
+            <h3><i class="fas fa-chart-line"></i> إحصائيات اللاعبين</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-trophy"></i>
+                    <div class="stat-content">
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-label">مليونير</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-content">
+                        <div class="stat-value">50,678</div>
+                        <div class="stat-label">لاعب نشط</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-coins"></i>
+                    <div class="stat-content">
+                        <div class="stat-value">$15M</div>
+                        <div class="stat-label">جوائز ممنوحة</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-play">
+            <button id="quick-start" class="quick-start-btn">
+                <i class="fas fa-bolt"></i>
+                <span>بدء سريع</span>
             </button>
-        </div>
-
-        <div class="stats-section">
-            <div class="stats-container">
-                <div class="stat-card" data-stat="prize">
-                    <div class="stat-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="stat-info">
-                        <div class="stat-value">1,000,000</div>
-                        <div class="stat-label">جائزة كبرى</div>
-                    </div>
-                </div>
-
-                <div class="stat-card" data-stat="questions">
-                    <div class="stat-icon">
-                        <i class="fas fa-question-circle"></i>
-                    </div>
-                    <div class="stat-info">
-                        <div class="stat-value">15</div>
-                        <div class="stat-label">سؤال</div>
-                    </div>
-                </div>
-
-                <div class="stat-card" data-stat="lifelines">
-                    <div class="stat-icon">
-                        <i class="fas fa-life-ring"></i>
-                    </div>
-                    <div class="stat-info">
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">مساعدات</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="features-section">
-            <h3 class="section-title">
-                <i class="fas fa-star"></i>
-                مميزات اللعبة
-            </h3>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h4 class="feature-title">خطوط أمان</h4>
-                    <p class="feature-description">أسئلة آمنة عند 5 و 10</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h4 class="feature-title">مساعدة الجمهور</h4>
-                    <p class="feature-description">استشارة المشاهدين</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-phone-alt"></i>
-                    </div>
-                    <h4 class="feature-title">الاتصال بصديق</h4>
-                    <p class="feature-description">استفسر من خبير</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-balance-scale"></i>
-                    </div>
-                    <h4 class="feature-title">50:50</h4>
-                    <p class="feature-description">إزالة إجابتين خاطئتين</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="settings-section">
-            <div class="settings-container">
-                <button class="setting-btn" id="instructions-btn" title="تعليمات اللعبة">
-                    <i class="fas fa-question-circle"></i>
-                    <span class="setting-text">تعليمات</span>
-                </button>
-
-                <button class="setting-btn" id="credits-btn" title="نبذة عن المطور">
-                    <i class="fas fa-code"></i>
-                    <span class="setting-text">نبذة</span>
-                </button>
-            </div>
         </div>
 
         <footer class="footer-section">
@@ -141,58 +193,15 @@
                     <i class="fas fa-copyright"></i>
                     <span>2024 المليونير الذهبي. جميع الحقوق محفوظة.</span>
                 </div>
-                <div class="version">الإصدار 2.0</div>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-question-circle"></i> المساعدة</a>
+                    <a href="#"><i class="fas fa-shield-alt"></i> الخصوصية</a>
+                    <a href="#"><i class="fas fa-file-contract"></i> الشروط</a>
+                </div>
             </div>
         </footer>
     </div>
 
-    <script type="module">
-        // كود start.js مبسط يعمل مباشرة
-        document.addEventListener('DOMContentLoaded', function() {
-            const startButton = document.getElementById('start-game-btn');
-            const playerNameInput = document.getElementById('player-name');
-            
-            const savedName = localStorage.getItem('millionairePlayerName');
-            if (savedName) {
-                playerNameInput.value = savedName;
-            }
-            
-            startButton.addEventListener('click', function() {
-                const playerName = playerNameInput.value.trim();
-                
-                if (!playerName || playerName.length < 2) {
-                    alert('الرجاء إدخال اسم صحيح (حرفين على الأقل)');
-                    playerNameInput.focus();
-                    return;
-                }
-                
-                localStorage.setItem('millionairePlayerName', playerName);
-                window.location.href = 'game.html';
-            });
-            
-            playerNameInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    startButton.click();
-                }
-            });
-            
-            document.getElementById('instructions-btn').addEventListener('click', function() {
-                alert(`🎮 تعليمات اللعبة:
-
-1. هدف اللعبة: أجب على 15 سؤالاً لتربح مليون دولار
-2. خطوط الأمان: عند السؤال 5 و 10 الجائزة مضمونة
-3. المساعدات: 
-   - 50/50: تزيل إجابتين خاطئتين
-   - سؤال الجمهور: استشارة المشاهدين
-   - الاتصال بصديق: استفسر من خبير
-4. الوقت: 30 ثانية لكل سؤال
-5. يمكنك الانسحاب بأي وقت وأخذ الجائزة الحالية`);
-            });
-            
-            document.getElementById('credits-btn').addEventListener('click', function() {
-                alert('المليونير الذهبي\nالإصدار 2.0\nتم التطوير باستخدام HTML, CSS, JavaScript\n© 2024 جميع الحقوق محفوظة');
-            });
-        });
-    </script>
+    <script src="start.js"></script>
 </body>
-</html>
+                </html>
