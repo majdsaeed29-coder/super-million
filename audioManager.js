@@ -1,8 +1,10 @@
+// audioManager.js
 export class AudioManager {
     constructor() {
         this.enabled = true;
         this.volume = 0.7;
-        this.sounds = {};
+        this.sounds = new Map();
+        this.audioContext = null;
         this.init();
     }
 
@@ -10,63 +12,85 @@ export class AudioManager {
         this.enabled = localStorage.getItem('soundEnabled') !== 'false';
         this.volume = parseFloat(localStorage.getItem('volume')) || 0.7;
         
-        // تحميل الأصوات
-        this.loadSounds();
+        // محاولة إنشاء سياق الصوت
+        try {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+            console.log('Web Audio API غير مدعومة في هذا المتصفح');
+        }
     }
 
-    loadSounds() {
-        const sounds = {
-            correct: 'https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3',
-            wrong: 'https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3',
-            click: 'https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3',
-            timer: 'https://assets.mixkit.co/sfx/preview/mixkit-fast-clock-ticking-1020.mp3',
-            win: 'https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3',
-            lose: 'https://assets.mixkit.co/sfx/preview/mixkit-losing-bleeps-2026.mp3',
-            lifeline: 'https://assets.mixkit.co/sfx/preview/mixkit-magic-sparkles-3000.mp3',
-            start: 'https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3',
-            background: 'https://assets.mixkit.co/music/preview/mixkit-game-show-suspense-waiting-667.mp3'
-        };
-
-        Object.entries(sounds).forEach(([key, url]) => {
-            this.sounds[key] = new Audio(url);
-            this.sounds[key].volume = this.volume;
-        });
+    createSound(frequency, duration, type = 'sine') {
+        if (!this.enabled || !this.audioContext) return;
+        
+        try {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            oscillator.type = type;
+            oscillator.frequency.value = frequency;
+            gainNode.gain.value = this.volume * 0.3;
+            
+            oscillator.start();
+            
+            // إيقاف الصوت بعد المدة المحددة
+            setTimeout(() => {
+                oscillator.stop();
+            }, duration);
+            
+        } catch (error) {
+            console.log('خطأ في إنشاء الصوت:', error);
+        }
     }
 
     play(soundName) {
         if (!this.enabled) return;
         
-        try {
-            if (this.sounds[soundName]) {
-                const sound = this.sounds[soundName].cloneNode();
-                sound.volume = this.volume;
-                sound.play().catch(e => console.log('خطأ في تشغيل الصوت:', e));
-            }
-        } catch (error) {
-            console.log('لم يتمكن من تشغيل الصوت:', error);
-        }
-    }
-
-    stop(soundName) {
-        if (this.sounds[soundName]) {
-            this.sounds[soundName].pause();
-            this.sounds[soundName].currentTime = 0;
+        switch(soundName) {
+            case 'correct':
+                this.createSound(1200, 300); // صوت عالي للنصر
+                break;
+            case 'wrong':
+                this.createSound(400, 500); // صوت منخفض للخطأ
+                break;
+            case 'click':
+                this.createSound(800, 100); // صوت قصير للنقر
+                break;
+            case 'timer':
+                this.createSound(600, 100); // صوت المؤقت
+                break;
+            case 'win':
+                // تسلسل نغمات النجاح
+                setTimeout(() => this.createSound(659.25, 200), 0);   // E
+                setTimeout(() => this.createSound(783.99, 200), 200); // G
+                setTimeout(() => this.createSound(1046.50, 400), 400); // C
+                break;
+            case 'lose':
+                this.createSound(300, 800); // صوت طويل للخسارة
+                break;
+            case 'lifeline':
+                this.createSound(1000, 300); // صوت سحري للمساعدة
+                break;
+            case 'start':
+                this.createSound(523.25, 200); // C5
+                break;
         }
     }
 
     stopAll() {
-        Object.values(this.sounds).forEach(sound => {
-            sound.pause();
-            sound.currentTime = 0;
-        });
+        // إعادة إنشاء سياق الصوت لإيقاف جميع الأصوات
+        if (this.audioContext) {
+            this.audioContext.close();
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
     }
 
     setVolume(volume) {
-        this.volume = volume;
-        Object.values(this.sounds).forEach(sound => {
-            sound.volume = volume;
-        });
-        localStorage.setItem('volume', volume);
+        this.volume = Math.max(0, Math.min(1, volume));
+        localStorage.setItem('volume', this.volume);
     }
 
     toggle() {
@@ -80,17 +104,52 @@ export class AudioManager {
     }
 
     playBackgroundMusic() {
-        if (this.enabled && this.sounds.background) {
-            this.sounds.background.loop = true;
-            this.sounds.background.volume = this.volume * 0.5;
-            this.sounds.background.play().catch(e => console.log('خطأ في تشغيل موسيقى الخلفية'));
+        // يمكن إضافة موسيقى خلفية هنا إذا لزم الأمر
+        // نستخدم Web Audio API لإنشاء موسيقى خلفية بسيطة
+        if (!this.enabled || !this.audioContext) return;
+        
+        try {
+            // إنشاء نغمة خلفية بسيطة
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 261.63; // C4
+            gainNode.gain.value = this.volume * 0.1;
+            
+            // تشغيل النغمة بشكل متقطع
+            const playTone = () => {
+                gainNode.gain.setValueAtTime(this.volume * 0.1, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 2);
+                
+                setTimeout(() => {
+                    if (this.enabled) {
+                        oscillator.frequency.value = 261.63 + Math.random() * 100;
+                        playTone();
+                    }
+                }, 3000 + Math.random() * 2000);
+            };
+            
+            oscillator.start();
+            playTone();
+            
+            // حفظ المرجع لإيقافه لاحقاً
+            this.backgroundOscillator = oscillator;
+            this.backgroundGain = gainNode;
+            
+        } catch (error) {
+            console.log('خطأ في تشغيل موسيقى الخلفية:', error);
         }
     }
 
     stopBackgroundMusic() {
-        if (this.sounds.background) {
-            this.sounds.background.pause();
-            this.sounds.background.currentTime = 0;
+        if (this.backgroundOscillator) {
+            this.backgroundOscillator.stop();
+            this.backgroundOscillator = null;
+            this.backgroundGain = null;
         }
     }
 }
