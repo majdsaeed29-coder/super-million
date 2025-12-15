@@ -4,16 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المليونير الذهبي - اللعبة</title>
-    <link rel="stylesheet" href="game.css">
+    <!-- CSS الأساسي للعبة -->
+    <link rel="stylesheet" href="public/css/style.css">
+    <!-- مكتبة Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- خط Cairo للعربية -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- الحاوية الرئيسية للعبة -->
     <div class="game-container" id="game-container">
-        <!-- محتوى اللعبة سيتم تحميله بواسطة JavaScript -->
+        <!-- سيتم تعبئتها بواسطة JavaScript -->
+        <div class="container">
+            <!-- الشاشة الرئيسية -->
+            <div id="start-screen" class="screen active">
+                <!-- محتوى الشاشة الرئيسية -->
+            </div>
+
+            <!-- شاشة اللعبة -->
+            <div id="game-screen" class="screen">
+                <!-- محتوى شاشة اللعبة -->
+            </div>
+
+            <!-- شاشة النتائج -->
+            <div id="result-screen" class="screen">
+                <!-- محتوى شاشة النتائج -->
+            </div>
+        </div>
     </div>
 
-    <!-- استيراد ملفات JavaScript -->
+    <!-- نوافذ منبثقة -->
+    <div id="help-modal" class="modal">
+        <!-- نافذة التعليمات -->
+    </div>
+
+    <div id="withdraw-modal" class="modal">
+        <!-- نافذة الانسحاب -->
+    </div>
+
+    <div id="audience-modal" class="modal">
+        <!-- نافذة الجمهور -->
+    </div>
+
+    <div id="phone-modal" class="modal">
+        <!-- نافذة الاتصال بصديق -->
+    </div>
+
+    <!-- حاوية الإشعارات -->
+    <div id="notification-container"></div>
+
+    <!-- جميع ملفات JavaScript مرتبة حسب الترتيب الصحيح -->
+    <script type="module" src="js/config.js"></script>
+    <script type="module" src="js/gameState.js"></script>
+    <script type="module" src="js/question.js"></script>
+    <script type="module" src="js/domManager.js"></script>
+    <script type="module" src="js/timer.js"></script>
+    <script type="module" src="js/audioManager.js"></script>
+    <script type="module" src="js/uiEffects.js"></script>
+    <script type="module" src="js/lifelines.js"></script>
+    <script type="module" src="js/gameLogic.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/gameManager.js"></script>
 </body>
