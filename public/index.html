@@ -4,14 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المليونير الذهبي - من سيربح المليون</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- CSS الرئيسي -->
+    <link rel="stylesheet" href="public/css/style.css">
+    
+    <!-- مكتبة Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- خط Cairo للعربية -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- الحاوية الرئيسية -->
     <div class="container">
         <!-- الشاشة الرئيسية -->
         <div id="start-screen" class="screen active">
+            <!-- الشعار المتحرك -->
             <div class="logo">
                 <div class="logo-animation">
                     <i class="fas fa-crown"></i>
@@ -24,9 +32,10 @@
                 </div>
                 <h1>المليونير الذهبي</h1>
                 <p class="subtitle">من سيربح المليون</p>
-                <div class="version">الإصدار 1.0</div>
+                <div class="version">الإصدار 2.0</div>
             </div>
             
+            <!-- معلومات اللاعب -->
             <div class="player-info">
                 <div class="input-group">
                     <i class="fas fa-user input-icon"></i>
@@ -48,6 +57,7 @@
                 </div>
             </div>
             
+            <!-- إحصائيات اللعبة -->
             <div class="game-stats">
                 <div class="stat-card">
                     <i class="fas fa-trophy"></i>
@@ -72,6 +82,7 @@
                 </div>
             </div>
             
+            <!-- مميزات اللعبة -->
             <div class="features-grid">
                 <div class="feature">
                     <i class="fas fa-shield-alt"></i>
@@ -402,7 +413,7 @@
         </div>
     </div>
 
-    <!-- النوافذ المنبثقة -->
+    <!-- نافذة التعليمات -->
     <div id="help-modal" class="modal">
         <div class="modal-overlay"></div>
         <div class="modal-container">
@@ -520,10 +531,306 @@
         </div>
     </div>
 
-    <!-- نافذة الإشعارات -->
+    <!-- حاوية الإشعارات -->
     <div id="notification-container"></div>
 
-    <!-- السكريبتات -->
-    <script type="module" src="js/main.js"></script>
+    <!-- ملفات JavaScript مرتبة حسب الترتيب الصحيح -->
+    <script type="module">
+        // تحميل الملفات بالترتيب
+        import { CONFIG, PRIZES } from './js/config.js';
+        import { gameState } from './js/gameState.js';
+        import { QUESTIONS, getRandomQuestion } from './js/question.js';
+        import { domManager } from './js/domManager.js';
+        import { timer } from './js/timer.js';
+        import { audioManager } from './js/audioManager.js';
+        import { uiEffects } from './js/uiEffects.js';
+        import { lifelines } from './js/lifelines.js';
+        import { gameLogic } from './js/gameLogic.js';
+        
+        // تهيئة اللعبة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('المليونير الذهبي - الصفحة جاهزة');
+            
+            // تهيئة المديرين
+            audioManager.initialize();
+            uiEffects.init();
+            
+            // تحميل الإعدادات المحفوظة
+            loadSavedSettings();
+            
+            // إعداد الأحداث
+            setupEventListeners();
+            
+            // بدء اللعبة إذا كان هناك اسم لاعب
+            const playerName = localStorage.getItem('millionairePlayerName') || 'ضيف';
+            if (playerName) {
+                gameState.playerName = playerName;
+                domManager.updatePlayerInfo(playerName);
+                
+                // تحديث قائمة الجوائز
+                domManager.updatePrizesList(0, PRIZES);
+            }
+            
+            // إظهار تلميح
+            setTimeout(() => {
+                domManager.showNotification('أدخل اسمك واضغط ابدأ اللعبة!', 'info');
+            }, 1000);
+        });
+        
+        function loadSavedSettings() {
+            try {
+                const savedSoundSetting = localStorage.getItem('millionaireSoundEnabled');
+                if (savedSoundSetting !== null) {
+                    audioManager.setEnabled(savedSoundSetting === 'true');
+                }
+            } catch (e) {
+                console.log('لا توجد إعدادات محفوظة');
+            }
+        }
+        
+        function setupEventListeners() {
+            // زر بدء اللعبة
+            const startBtn = document.getElementById('start-btn');
+            if (startBtn) {
+                startBtn.addEventListener('click', startGame);
+            }
+            
+            // زر التعليمات
+            const instructionsBtn = document.getElementById('instructions-btn');
+            if (instructionsBtn) {
+                instructionsBtn.addEventListener('click', () => {
+                    document.getElementById('help-modal').classList.add('active');
+                });
+            }
+            
+            // زر الصوت
+            const soundToggle = document.getElementById('sound-toggle');
+            if (soundToggle) {
+                soundToggle.addEventListener('click', toggleSound);
+            }
+            
+            // إغلاق النوافذ
+            const closeButtons = document.querySelectorAll('.modal-close');
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    if (modal) modal.classList.remove('active');
+                });
+            });
+            
+            // نافذة التعليمات - زر البدء
+            const startAfterHelp = document.getElementById('start-after-help');
+            if (startAfterHelp) {
+                startAfterHelp.addEventListener('click', function() {
+                    document.getElementById('help-modal').classList.remove('active');
+                    startGame();
+                });
+            }
+            
+            // زر التالي في شاشة اللعبة
+            const nextBtn = document.getElementById('next-btn');
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    if (gameLogic.goToNextQuestion()) {
+                        audioManager.play('click');
+                    }
+                });
+            }
+            
+            // زر الانسحاب
+            const withdrawBtn = document.getElementById('withdraw-btn');
+            if (withdrawBtn) {
+                withdrawBtn.addEventListener('click', showWithdrawModal);
+            }
+            
+            // زر تأكيد الانسحاب
+            const confirmWithdraw = document.getElementById('confirm-withdraw');
+            if (confirmWithdraw) {
+                confirmWithdraw.addEventListener('click', () => {
+                    const prize = gameLogic.safeWithdraw();
+                    domManager.showNotification(`انسحاب آمن! ربحت ${prize.toLocaleString()} $`, 'info');
+                    gameLogic.endGame(false);
+                    document.getElementById('withdraw-modal').classList.remove('active');
+                });
+            }
+            
+            // زر إلغاء الانسحاب
+            const cancelWithdraw = document.getElementById('cancel-withdraw');
+            if (cancelWithdraw) {
+                cancelWithdraw.addEventListener('click', () => {
+                    document.getElementById('withdraw-modal').classList.remove('active');
+                });
+            }
+            
+            // زر استمرار اللعب
+            const continuePlaying = document.getElementById('continue-playing');
+            if (continuePlaying) {
+                continuePlaying.addEventListener('click', () => {
+                    document.getElementById('withdraw-modal').classList.remove('active');
+                });
+            }
+            
+            // المساعدات
+            const fiftyFiftyBtn = document.getElementById('fifty-fifty');
+            if (fiftyFiftyBtn) {
+                fiftyFiftyBtn.addEventListener('click', () => {
+                    if (lifelines.useFiftyFifty(gameLogic.currentQuestion?.correct)) {
+                        audioManager.play('click');
+                    }
+                });
+            }
+            
+            const askAudienceBtn = document.getElementById('ask-audience');
+            if (askAudienceBtn) {
+                askAudienceBtn.addEventListener('click', () => {
+                    if (lifelines.useAskAudience()) {
+                        audioManager.play('click');
+                    }
+                });
+            }
+            
+            const phoneFriendBtn = document.getElementById('phone-friend');
+            if (phoneFriendBtn) {
+                phoneFriendBtn.addEventListener('click', () => {
+                    if (lifelines.usePhoneFriend()) {
+                        audioManager.play('click');
+                    }
+                });
+            }
+            
+            // خيارات الإجابة
+            const optionButtons = document.querySelectorAll('.option-card');
+            optionButtons.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    if (!gameState.gameActive || gameState.selectedOption !== null) return;
+                    
+                    audioManager.play('click');
+                    const isCorrect = gameLogic.checkAnswer(index);
+                    
+                    if (isCorrect) {
+                        // إذا كان السؤال الأخير وفاز
+                        if (gameState.currentQuestion === 14) {
+                            setTimeout(() => {
+                                gameLogic.endGame(true);
+                            }, 1500);
+                        }
+                    } else {
+                        setTimeout(() => {
+                            gameLogic.endGame(false);
+                        }, 2000);
+                    }
+                });
+            });
+            
+            // زر إعادة اللعب
+            const playAgainBtn = document.getElementById('play-again-btn');
+            if (playAgainBtn) {
+                playAgainBtn.addEventListener('click', () => {
+                    resetGame();
+                    window.location.reload();
+                });
+            }
+            
+            // زر القائمة الرئيسية
+            const mainMenuBtn = document.getElementById('main-menu-btn');
+            if (mainMenuBtn) {
+                mainMenuBtn.addEventListener('click', () => {
+                    domManager.showScreen('start');
+                });
+            }
+            
+            // زر المشاركة
+            const shareResult = document.getElementById('share-result');
+            if (shareResult) {
+                shareResult.addEventListener('click', shareGameResult);
+            }
+            
+            // اسم اللاعب عند الضغط على Enter
+            const playerNameInput = document.getElementById('player-name');
+            if (playerNameInput) {
+                playerNameInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        startGame();
+                    }
+                });
+            }
+        }
+        
+        function startGame() {
+            const playerNameInput = document.getElementById('player-name');
+            let playerName = playerNameInput ? playerNameInput.value.trim() : '';
+            
+            if (!playerName || playerName.length < 2) {
+                domManager.showNotification('الرجاء إدخال اسم صحيح (حرفين على الأقل)', 'error');
+                if (playerNameInput) playerNameInput.focus();
+                return;
+            }
+            
+            // حفظ اسم اللاعب
+            localStorage.setItem('millionairePlayerName', playerName);
+            
+            // بدء اللعبة
+            gameState.start(playerName);
+            domManager.showScreen('game');
+            domManager.updatePlayerInfo(playerName);
+            
+            // بدء الجولة الأولى
+            setTimeout(() => {
+                gameLogic.startNewRound();
+                domManager.showNotification(`مرحباً ${playerName}! ابدأ بالإجابة على الأسئلة`, 'success');
+            }, 500);
+        }
+        
+        function toggleSound() {
+            const isEnabled = audioManager.toggle();
+            const btn = document.getElementById('sound-toggle');
+            if (btn) {
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.className = isEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+                }
+            }
+        }
+        
+        function showWithdrawModal() {
+            const prize = gameState.getSafePrize();
+            const withdrawAmount = document.getElementById('withdraw-amount');
+            if (withdrawAmount) {
+                withdrawAmount.textContent = prize.toLocaleString();
+            }
+            document.getElementById('withdraw-modal').classList.add('active');
+        }
+        
+        function shareGameResult() {
+            const shareText = `فزت ب ${gameState.score.toLocaleString()} $ في لعبة المليونير الذهبي!`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'نتيجتي في المليونير الذهبي',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText);
+                domManager.showNotification('تم نسخ النتيجة للحافظة!', 'success');
+            }
+        }
+        
+        function resetGame() {
+            gameState.reset();
+            lifelines.resetLifelines();
+            timer.reset();
+            uiEffects.reset();
+        }
+        
+        // تصدير للاستخدام في ملفات أخرى
+        window.gameManager = {
+            startGame,
+            toggleSound,
+            showWithdrawModal,
+            shareGameResult,
+            resetGame
+        };
+    </script>
 </body>
-        </html>
+                                </html>
