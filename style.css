@@ -961,4 +961,165 @@ body {
 
 .breakdown-item span:first-child {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.breakdown-item span:last-child {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.result-stats {
+    margin-bottom: 30px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.stat-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.stat-box:hover {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: var(--accent-color);
+    transform: translateY(-3px);
+}
+
+.stat-box i {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.result-btn {
+    padding: 15px 30px;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Cairo', sans-serif;
+    font-weight: bold;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+    justify-content: center;
+}
+
+.result-btn.primary {
+    background: linear-gradient(135deg, var(--accent-color), #ff9800);
+    color: var(--dark-color);
+}
+
+.result-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.result-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1200px) {
+    .game-main {
+        flex-direction: column;
+    }
+    
+    .prizes-section {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .action-btn {
+        min-width: 100%;
+    }
+    
+    .lifelines-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .player-info-bar {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .game-stats-bar {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .question-text {
+        font-size: 1.4rem;
+    }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-dark);
+}
