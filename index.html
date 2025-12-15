@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المليونير الذهبي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -126,22 +127,7 @@
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.9rem;
         }
-        
-        .error-box {
-            background: rgba(231, 76, 60, 0.2);
-            border: 2px solid #e74c3c;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            text-align: left;
-        }
-        
-        .error-box h3 {
-            color: #e74c3c;
-            margin-bottom: 10px;
-        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -152,7 +138,7 @@
         </div>
         
         <div class="buttons">
-            <button class="btn btn-primary" onclick="startGame()">
+            <button class="btn btn-primary" onclick="window.location.href='start.html'">
                 <i class="fas fa-play-circle"></i>
                 ابدأ اللعبة
             </button>
@@ -160,11 +146,6 @@
             <button class="btn btn-secondary" onclick="showInstructions()">
                 <i class="fas fa-question-circle"></i>
                 تعليمات اللعبة
-            </button>
-            
-            <button class="btn btn-secondary" onclick="window.open('game.html', '_blank')">
-                <i class="fas fa-gamepad"></i>
-                شاشة اللعبة مباشرة
             </button>
         </div>
         
@@ -188,33 +169,12 @@
             </div>
         </div>
         
-        <!-- قسم تظهر فيه المشاكل -->
-        <div id="debug-info" class="error-box" style="display: none;">
-            <h3><i class="fas fa-bug"></i> معلومات تصحيح الأخطاء</h3>
-            <div id="debug-content"></div>
-        </div>
-        
         <div class="footer">
             <p>© 2024 المليونير الذهبي | الإصدار 2.0 | جميع الحقوق محفوظة</p>
         </div>
     </div>
 
     <script>
-        // دالة بدء اللعبة
-        function startGame() {
-            const playerName = prompt("أدخل اسمك:", "اللاعب");
-            if (playerName && playerName.trim().length >= 2) {
-                // حفظ اسم اللاعب
-                localStorage.setItem('millionairePlayerName', playerName.trim());
-                
-                // الانتقال للعبة
-                window.location.href = 'game.html';
-            } else {
-                alert("الرجاء إدخال اسم صحيح (حرفين على الأقل)");
-            }
-        }
-        
-        // دالة عرض التعليمات
         function showInstructions() {
             alert(`🎮 تعليمات اللعبة:
 
@@ -227,62 +187,6 @@
 4. الوقت: 30 ثانية لكل سؤال
 5. يمكنك الانسحاب بأي وقت وأخذ الجائزة الحالية`);
         }
-        
-        // فحص الملفات عند تحميل الصفحة
-        window.onload = function() {
-            const debugDiv = document.getElementById('debug-info');
-            const debugContent = document.getElementById('debug-content');
-            let errors = [];
-            
-            // التحقق من وجود الملفات المهمة
-            const requiredFiles = [
-                'game.html',
-                'start.html',
-                'public/css/style.css',
-                'js/main.js',
-                'js/config.js'
-            ];
-            
-            debugContent.innerHTML = '';
-            
-            requiredFiles.forEach(file => {
-                debugContent.innerHTML += `<div>🔍 ${file}: <span id="check-${file.replace(/[\/\.]/g, '-')}">جاري الفحص...</span></div>`;
-            });
-            
-            debugContent.innerHTML += '<hr><div>افتح Console (F12) لرؤية الأخطاء التفصيلية</div>';
-            
-            // إظهار قسم التصحيح
-            debugDiv.style.display = 'block';
-            
-            // طباعة معلومات للمساعدة
-            console.log('=== معلومات النظام ===');
-            console.log('URL الحالي:', window.location.href);
-            console.log('المجلد الحالي:', window.location.pathname);
-            console.log('=== انتهى ===');
-        };
-        
-        // اختصار لوحة المفاتيح للتصحيح
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-                console.clear();
-                console.log('=== تصحيح الملفات ===');
-                
-                // محاولة تحميل ملفات JS للتأكد من وجودها
-                const testLoad = document.createElement('script');
-                testLoad.src = 'js/config.js';
-                testLoad.onload = function() {
-                    console.log('✅ js/config.js موجود ويعمل');
-                };
-                testLoad.onerror = function() {
-                    console.log('❌ js/config.js غير موجود أو به خطأ');
-                };
-                document.head.appendChild(testLoad);
-            }
-        });
     </script>
-
-<!-- في نهاية body، قبل </body> -->
-<script type="module" src="js/main.js"></script>
-    
 </body>
 </html>
