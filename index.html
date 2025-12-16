@@ -278,10 +278,40 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        /* رسوم متحركة للدولارات */
+        .money-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .money {
+            position: absolute;
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+            opacity: 0;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0.5;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="loading-screen" id="loadingScreen">
+        <!-- رسوم متحركة للدولارات -->
+        <div class="money-rain" id="moneyRain"></div>
+        
         <div class="background-lights">
             <div class="stars"></div>
             <div class="light-beam"></div>
@@ -307,7 +337,7 @@
 
         <div class="progress-text" id="progressText">0%</div>
 
-        <div class="countdown" id="countdown">100</div>
+        <div class="countdown" id="countdown">30</div>
 
         <div class="loading-tips" id="loadingTip">
             جاري تحضير المليون لك...
@@ -318,10 +348,12 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { audioManager } from './audioManager.js';
+
         class LoadingScreen {
             constructor() {
-                this.totalTime = 100000; // 100 ثانية
+                this.totalTime = 30000; // 30 ثانية فقط
                 this.currentTime = 0;
                 this.interval = null;
                 this.tips = [
@@ -340,10 +372,27 @@
             }
 
             init() {
+                this.createMoneyRain();
                 this.createLadderSteps();
                 this.startLoading();
                 this.setupEventListeners();
-                this.playLoadingSound();
+                this.playBackgroundMusic();
+            }
+
+            createMoneyRain() {
+                const moneyRain = document.getElementById('moneyRain');
+                const moneySymbols = ['$', '€', '£', '¥', '₩', '₽'];
+                
+                for (let i = 0; i < 20; i++) {
+                    const money = document.createElement('div');
+                    money.className = 'money';
+                    money.innerHTML = moneySymbols[Math.floor(Math.random() * moneySymbols.length)];
+                    money.style.left = Math.random() * 100 + 'vw';
+                    money.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    money.style.animationDelay = Math.random() * 5 + 's';
+                    money.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                    moneyRain.appendChild(money);
+                }
             }
 
             createLadderSteps() {
@@ -357,6 +406,10 @@
                     step.style.opacity = 0.5 + (i * 0.03);
                     ladderSteps.appendChild(step);
                 }
+            }
+
+            playBackgroundMusic() {
+                audioManager.playBackgroundMusic('menu');
             }
 
             startLoading() {
@@ -390,8 +443,8 @@
                     const dollarPosition = (percentage * 0.8);
                     dollar.style.bottom = dollarPosition + 'vh';
                     
-                    // تغيير التلميحة كل 12 ثانية
-                    if (elapsed % 12000 < 100) {
+                    // تغيير التلميحة كل 5 ثواني
+                    if (Math.floor(elapsed / 5000) > Math.floor((elapsed - 100) / 5000)) {
                         this.changeLoadingTip();
                     }
                     
@@ -426,12 +479,33 @@
                 dollar.style.textShadow = '0 0 50px #ffd700';
                 
                 // تشغيل صوت النجاح
-                this.playSuccessSound();
+                audioManager.play('win');
+                
+                // إظهار مطر دولارات كثيف
+                this.showHeavyMoneyRain();
                 
                 // الانتقال بعد 2 ثانية
                 setTimeout(() => {
+                    audioManager.stopBackgroundMusic();
                     window.location.href = 'start.html';
                 }, 2000);
+            }
+
+            showHeavyMoneyRain() {
+                const moneyRain = document.getElementById('moneyRain');
+                const moneySymbols = ['$', '€', '£', '¥', '₩', '₽'];
+                
+                for (let i = 0; i < 50; i++) {
+                    const money = document.createElement('div');
+                    money.className = 'money';
+                    money.innerHTML = moneySymbols[Math.floor(Math.random() * moneySymbols.length)];
+                    money.style.left = Math.random() * 100 + 'vw';
+                    money.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+                    money.style.animationDelay = '0s';
+                    money.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                    money.style.opacity = '0.8';
+                    moneyRain.appendChild(money);
+                }
             }
 
             skipLoading() {
@@ -470,74 +544,12 @@
                 }, 2000);
             }
 
-            playLoadingSound() {
-                try {
-                    // إنشاء صوت تحميل بسيط باستخدام Web Audio API
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.type = 'sine';
-                    oscillator.frequency.value = 523.25; // C5
-                    gainNode.gain.value = 0.1;
-                    
-                    oscillator.start();
-                    
-                    // إيقاف الصوت بعد 0.5 ثانية
-                    setTimeout(() => {
-                        oscillator.stop();
-                    }, 500);
-                    
-                } catch (error) {
-                    console.log('لم يتمكن من تشغيل الصوت');
-                }
-            }
-
-            playSuccessSound() {
-                try {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    
-                    // إنشاء تسلسل نغمات النجاح
-                    const notes = [659.25, 783.99, 1046.50]; // E5, G5, C6
-                    let currentNote = 0;
-                    
-                    const playNote = () => {
-                        if (currentNote >= notes.length) return;
-                        
-                        const oscillator = audioContext.createOscillator();
-                        const gainNode = audioContext.createGain();
-                        
-                        oscillator.connect(gainNode);
-                        gainNode.connect(audioContext.destination);
-                        
-                        oscillator.type = 'sine';
-                        oscillator.frequency.value = notes[currentNote];
-                        gainNode.gain.value = 0.1;
-                        
-                        oscillator.start();
-                        
-                        setTimeout(() => {
-                            oscillator.stop();
-                            currentNote++;
-                            playNote();
-                        }, 300);
-                    };
-                    
-                    playNote();
-                    
-                } catch (error) {
-                    console.log('لم يتمكن من تشغيل صوت النجاح');
-                }
-            }
-
             setupEventListeners() {
                 // التخطي بالضغط على المسافة
                 document.addEventListener('keydown', (e) => {
                     if (e.code === 'Space') {
                         e.preventDefault();
+                        audioManager.play('click');
                         this.skipLoading();
                     }
                 });
@@ -545,6 +557,7 @@
                 // التخطي بالضغط على الشاشة (للموبايل)
                 document.addEventListener('click', (e) => {
                     if (e.target.id === 'skipHint' || e.target.closest('#skipHint')) {
+                        audioManager.play('click');
                         this.skipLoading();
                     }
                 });
@@ -553,7 +566,20 @@
 
         // بدء شاشة التحميل
         document.addEventListener('DOMContentLoaded', () => {
-            new LoadingScreen();
+            const loadingScreen = new LoadingScreen();
+            
+            // حفظ صوت المستخدم
+            audioManager.enabled = localStorage.getItem('soundEnabled') !== 'false';
+            
+            // إضافة تأثيرات صوتية عند تحريك الدولار
+            setInterval(() => {
+                if (loadingScreen.currentTime > 0 && loadingScreen.currentTime < loadingScreen.totalTime) {
+                    const progress = loadingScreen.currentTime / loadingScreen.totalTime;
+                    if (Math.random() < 0.3) {
+                        audioManager.play('click');
+                    }
+                }
+            }, 1000);
         });
     </script>
 </body>
